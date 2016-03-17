@@ -112,7 +112,7 @@ var svg = d3.select("#sunburst").append("svg")
     .attr("transform", "translate(" + width / 2 + "," + (height / 2 + 10) + ")");
 var grid = d3.select("#grid").append("svg")
     .attr("width", width)
-    .attr("height", height)
+    .attr("height", height*30)
   .append("g")
     .attr("transform", "translate(" + width / 2 + "," + (height / 2 + 10) + ")");
 var sizeScale = d3.scale.linear().domain([10,4000]).range([10,100])
@@ -156,13 +156,12 @@ var arc = d3.svg.arc()
         .attr("dy", ".35em") // vertical-align
         .text(function(d) { return d.name; });
 
+    
       function click(d) {
-    console.log(images)
           
         // fade out all text elements
           var imagesKeyArray = []
           var imagesArray = []
-          console.log(images)
           if(d.name == "day"){
               for(var c in d.children){
                   imagesKeyArray.push(d.children[c].name)
@@ -171,10 +170,38 @@ var arc = d3.svg.arc()
                   }
               }
               for(var k in imagesKeyArray){
-                  //console.log(images["Day"][imagesKeyArray[k]])
-                  imagesArray = imagesArray.concat(images["Day"][imagesKeyArray[k]])
-                  
+                  imagesArray = imagesArray.concat(images["Day"][imagesKeyArray[k]])                  
               }
+          }
+          else if(d.name == "night"){
+              for(var c in d.children){
+                  imagesKeyArray.push(d.children[c].name)
+                  for(var e in d.children[c].children){
+                      imagesKeyArray.push(d.children[c].children[e].name)
+                  }
+              }
+              for(var k in imagesKeyArray){
+                  imagesArray = imagesArray.concat(images["Night"][imagesKeyArray[k]])                  
+              }
+          }
+          else if(d.parent.name == "day"){
+              for(var c in d.children){
+                  imagesKeyArray.push(d.children[c].name)
+              }
+              for(var k in imagesKeyArray){
+                  imagesArray = imagesArray.concat(images["Day"][imagesKeyArray[k]])                  
+              }
+          }else if(d.parent.name == "night"){
+              for(var c in d.children){
+                  imagesKeyArray.push(d.children[c].name)
+              }
+              for(var k in imagesKeyArray){
+                  imagesArray = imagesArray.concat(images["Night"][imagesKeyArray[k]])                  
+              }
+          }else if(d.parent.parent.name=="day"){
+              imagesArray = images["Day"][d.name.replace(" ","_")]  
+          }else if(d.parent.parent.name=="night"){
+              imagesArray = images["Night"][d.name][d.name.replace(" ","_")]   
           }
           console.log(imagesArray.length)
           drawGrid(d.name,imagesArray)
@@ -212,22 +239,25 @@ function fakeGridData(size){
     return fakeArray
 }
 
-function drawGrid(category,images){
-    
-    console.log(images)
+
+
+function drawGrid(category,imagesArray){
+    var short = imagesArray.slice([0,10])
+    console.log(short)
     var fakeData = fakeGridData(Math.random()*800)
     var imageSize = 10
-    var perRow = 50
+    var perRow = 60
     var fakegrid = d3.select("#grid svg")
-    fakegrid.selectAll("image").remove
+    fakegrid.selectAll("image").remove()
     fakegrid.selectAll("image")
-    .data(images)
+    .data(imagesArray)
     .enter()
     .append("svg:image")
     .transition()
-    .delay(function(d,i){return i*10})
+    .delay(function(d,i){return i})
     .attr("xlink:href", function(d,i){
-        return d[0]
+        //console.log (d[0])
+        return "http://www.dataminding.org/jiazhang/files/gimgs/13_dsc0027.jpg"
         return "images/"+i%7+".jpeg"
     })
     .attr("width",imageSize)
