@@ -1,7 +1,7 @@
 
-var width = 700,
-    height = 800,
-    radius = 350;
+var width = 820,
+    height = 820,
+    radius = 400;
 
 var x = d3.scale.linear()
     .range([0, 2 * Math.PI]);
@@ -25,7 +25,8 @@ var dayThird = {
     "city":"#966527",
   "urban":"#955f0e",
   "cityscape":"#996B29",
-  "metropolis":"#9B702F",
+  "metropolis":"#9B702F",  
+"metropolitan_area":"#9B702F",
   "location":"#9E753B",
   "landmark":"#A28352",
   "residential_area":"#A4885C",
@@ -65,6 +66,7 @@ var nightThird = {
   "city":"4A75A6",
   "cityscape":"#4E72A6",
   "metropolis":"#5471A1",
+  "metropolitan_area":"#5471A1",
   "location":"#5B7098",
   "landmark":"#656C8C",
   "residential_area":"#696A88",
@@ -148,7 +150,6 @@ var arc = d3.svg.arc()
             return color((d.children ? d : d.parent).name); 
         })
         .on("click", click);
-
       var text = g.append("text")
         .attr("transform", function(d) { return "rotate(" + computeTextRotation(d) + ")"; })
         .attr("x", function(d) { return y(d.y); })
@@ -157,12 +158,16 @@ var arc = d3.svg.arc()
         .text(function(d) { return d.name; });
 
     
-      function click(d) {
-          
+      function click(d) {          
         // fade out all text elements
           var imagesKeyArray = []
           var imagesArray = []
-          if(d.name == "day"){
+          if(d.name == "instagram"){
+              console.log(d.name)
+              d3.select("#current").html("all") 
+              
+          }
+          else if(d.name == "day"){
               for(var c in d.children){
                   imagesKeyArray.push(d.children[c].name)
                   for(var e in d.children[c].children){
@@ -172,6 +177,7 @@ var arc = d3.svg.arc()
               for(var k in imagesKeyArray){
                   imagesArray = imagesArray.concat(images["Day"][imagesKeyArray[k]])                  
               }
+              d3.select("#current").html(imagesArray.length+" images for "+d.name) 
           }
           else if(d.name == "night"){
               for(var c in d.children){
@@ -183,6 +189,8 @@ var arc = d3.svg.arc()
               for(var k in imagesKeyArray){
                   imagesArray = imagesArray.concat(images["Night"][imagesKeyArray[k]])                  
               }
+              d3.select("#current").html(imagesArray.length+" images for "+d.name) 
+              
           }
           else if(d.parent.name == "day"){
               for(var c in d.children){
@@ -191,19 +199,32 @@ var arc = d3.svg.arc()
               for(var k in imagesKeyArray){
                   imagesArray = imagesArray.concat(images["Day"][imagesKeyArray[k]])                  
               }
+              d3.select("#current").html(imagesArray.length+" images for "+d.parent.name+":"+d.name) 
+              
           }else if(d.parent.name == "night"){
               for(var c in d.children){
                   imagesKeyArray.push(d.children[c].name)
+                  
               }
               for(var k in imagesKeyArray){
-                  imagesArray = imagesArray.concat(images["Night"][imagesKeyArray[k]])                  
+                  imagesArray = imagesArray.concat(images["Night"][imagesKeyArray[k]])    
+                           
               }
-          }else if(d.parent.parent.name=="day"){
+              d3.select("#current").html(imagesArray.length+" images for "+d.parent.name+":"+d.name) 
+              
+          }
+          else if(d.parent.parent.name=="day"){
               imagesArray = images["Day"][d.name.replace(" ","_")]  
-          }else if(d.parent.parent.name=="night"){
-              imagesArray = images["Night"][d.name][d.name.replace(" ","_")]   
+              d3.select("#current").html(imagesArray.length+" images for "+d.parent.parent.name+":"+d.parent.name+":"+d.name)
+          }
+          else if(d.parent.parent.name=="night")
+          {
+              imagesArray = images["Night"][d.name.replace(" ","_")]   
+              d3.select("#current").html(imagesArray.length+" images for "+d.parent.parent.name+":"+d.parent.name+":"+d.name)
           }
           console.log(imagesArray.length)
+          console.log(imagesArray)
+          
           drawGrid(d.name,imagesArray)
           
         text.transition().attr("opacity", 0);
@@ -269,8 +290,8 @@ d3.uri = function(url, callback) {
 function drawGrid(category,imagesArray){
    
     var fakeData = fakeGridData(Math.random()*800)
-    var imageSize = 40
-    var perRow = 60
+    var imageSize = 50
+    var perRow = 10
     var fakegrid = d3.select("#grid svg")
     fakegrid.selectAll("image").remove()
     fakegrid.selectAll("image")
@@ -290,8 +311,8 @@ function drawGrid(category,imagesArray){
     })
     .attr("width",imageSize)
     .attr("height",imageSize)
-    .attr("x",function(d,i){return i%perRow*(imageSize+2)})
-    .attr("y",function(d,i){return Math.floor(i/perRow)*(imageSize+2)})
+    .attr("x",function(d,i){return i%perRow*(imageSize+3)})
+    .attr("y",function(d,i){return Math.floor(i/perRow)*(imageSize+3)})
     
 }
 

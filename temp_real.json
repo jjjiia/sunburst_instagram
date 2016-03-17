@@ -23,6 +23,7 @@
               {"name":"location","size":86},
               {"name":"landmark","size":227},
               {"name":"residential area","size":203},
+              {"name":"metropolitan area","size":102},
               {"name":"architecture","size":637},
               {"name":"urban area","size":254}
           ]
@@ -30,7 +31,11 @@
       {"name": "light", 
           "children":[
               {"name":"light","size":513},
-              {"name":"lighting","size":328}
+              {"name":"lighting","size":328},
+              {"name":"light fixture","size":36},
+              {"name":"darkness","size":63},
+              {"name":"daylighting","size":33},
+              {"name":"night","size":381}
           ]
       },
       {"name": "people", 
@@ -57,7 +62,8 @@
               {"name":"human action","size":657},
               {"name":"crowd","size":305},
               {"name":"conversation","size":3},
-              {"name":"community","size":17}
+              {"name":"community","size":17},
+              {"name":"team","size":191}
           ]
       },
       {"name": "urban",
@@ -68,6 +74,7 @@
               {"name":"location","size":58},
               {"name":"landmark","size":101},
               {"name":"residential area","size":63},
+              {"name":"metropolitan area","size":95},
               {"name":"architecture","size":296},
               {"name":"urban area","size":123}
           ]
@@ -75,7 +82,11 @@
       {"name": "light", 
           "children":[
               {"name":"light","size":627},
-              {"name":"lighting","size":383}
+              {"name":"lighting","size":383},
+              {"name":"light fixture","size":34},
+              {"name":"darkness","size":111},
+              {"name":"daylighting","size":7},
+              {"name":"night","size":672}
           ]
       },
       {"name": "people", 
