@@ -29,8 +29,8 @@ text {
 <script>
 
 var width = 700,
-    height = 700,
-    radius = 300;
+    height = 800,
+    radius = 350;
 
 var x = d3.scale.linear()
     .range([0, 2 * Math.PI]);
@@ -133,10 +133,10 @@ var grid = d3.select("#grid").append("svg")
     .attr("height", height)
   .append("g")
     .attr("transform", "translate(" + width / 2 + "," + (height / 2 + 10) + ")");
-
+var sizeScale = d3.scale.linear().domain([10,4000]).range([10,100])
 var partition = d3.layout.partition()
     .value(function(d) { //console.log(d.name);
-         return 2; return d.size; });
+         return sizeScale(d.size); });
 
 var arc = d3.svg.arc()
     .startAngle(function(d) { return Math.max(0, Math.min(2 * Math.PI, x(d.x))); })
@@ -153,14 +153,11 @@ d3.json("temp_real.json", function(error, root) {
     .attr("d", arc)
     .style("fill", function(d) { 
         if(d.name == "day" || d.name=="night"|| d.name =="instagram"){
-            console.log([d.name,"top level"])
             return(topDictionary[d.name])
         }else if(d.parent.name=="night"){
             return nightSecond[d.name]
-            console.log([d.name,"secondlevel of night"])
         }else if(d.parent.name =="day"){
             return daySecond[d.name]
-            console.log([d.name,"secondlevel of day"])
         }else if(d.parent.parent.name =="day"){
             return dayThird[d.name.replace(" ","_")]
         }else{
