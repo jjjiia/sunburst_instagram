@@ -100,7 +100,7 @@ var nightThird = {
 $(function() {
 	queue()
 		.defer(d3.json, "temp_real.json")
-        .defer(d3.json, "instagrams.json")
+        .defer(d3.json, "instagrams_2.json")
         .await(dataDidLoad);
 })
 function dataDidLoad(error,tree,images){
