@@ -187,6 +187,10 @@ var arc = d3.svg.arc()
         // fade out all text elements
           var imagesKeyArray = []
           var imagesArray = []
+           d3.selectAll(".dots").remove()
+           d3.selectAll(".red").remove()
+           d3.selectAll(".blue").remove()
+          
           if(d.name == "instagram"){
               console.log(d.name)
               d3.select("#current").html("all") 
@@ -239,18 +243,27 @@ var arc = d3.svg.arc()
               
           }
           else if(d.parent.parent.name=="day"){
-              imagesArray = images["Day"][d.name.replace(" ","_")]  
-              d3.select("#current").html(imagesArray.length+" images for "+d.parent.parent.name+":"+d.parent.name+":"+d.name)
+              imagesArrayD = images["Day"][d.name.replace(" ","_")]  
+              imagesArrayN = images["Night"][d.name.replace(" ","_")]  
+              
+              drawDots(imagesArrayD.slice([1,imagesArrayD.length]), d.name.replace(" ","_"), "red")
+              drawDots(imagesArrayN.slice([1,imagesArrayN.length]), d.name.replace(" ","_"), "blue")
+              
+              d3.select("#current").html(imagesArrayD.length+imagesArrayN.length+" images for "+d.name)
           }
           else if(d.parent.parent.name=="night")
           {
-              imagesArray = images["Night"][d.name.replace(" ","_")]   
-              d3.select("#current").html(imagesArray.length+" images for "+d.parent.parent.name+":"+d.parent.name+":"+d.name)
+              imagesArrayD = images["Day"][d.name.replace(" ","_")]  
+              imagesArrayN = images["Night"][d.name.replace(" ","_")]  
+              
+              drawDots(imagesArrayD.slice([1,imagesArrayD.length]), d.name.replace(" ","_"), "red")
+              drawDots(imagesArrayN.slice([1,imagesArrayN.length]), d.name.replace(" ","_"), "blue")
+              
+              d3.select("#current").html(imagesArrayD.length+imagesArrayN.length+" images for "+d.name)
           }
           //console.log(imagesArray.length)
           //console.log(imagesArray.slice([1,imagesArray.length]))
-           d3.selectAll(".dots").remove()
-          drawDots(imagesArray.slice([1,imagesArray.length]),d.name)
+          drawDots(imagesArray.slice([1,imagesArray.length]), d.name.replace(" ","_"), "red")
           d3.selectAll(".arc").attr("opacity",.4)
           d3.select(this).attr("opacity",1)
        // text.transition().attr("opacity", 0);
@@ -278,15 +291,15 @@ var arc = d3.svg.arc()
 
 d3.select(self.frameElement).style("height", height + "px");
 
-function drawDots(data,category){
+function drawDots(data,category,color){
     //console.log(data)
    
     d3.select("#map svg").selectAll(".dots")
         .data(data)
         .enter()
         .append("circle")//.transition().delay(function(d,i){return i/2})
-        .attr("class","dots")
-        .attr("r",2)
+        .attr("class",color)
+        .attr("r",4)
         .attr("cx",function(d){
             if(d!= undefined){
                 var lat = parseFloat(d[1])
@@ -307,13 +320,10 @@ function drawDots(data,category){
 
         })
         .attr("fill",function(d){
-            return "red"
+            return color
             return colorDictionary[category.replace(" ","_")]
         })
-        .attr("opacity",.3)
-        .attr("fill","#000")
-        //.attr("stroke-width",2)
-        
+        .attr("opacity",1)        
 }
 
 function drawMap(category,imagesArray){
