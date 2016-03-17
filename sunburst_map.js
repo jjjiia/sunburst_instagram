@@ -158,6 +158,7 @@ var arc = d3.svg.arc()
 
       var path = g.append("path")
         .attr("d", arc)
+        .attr("class","arc")
         .style("fill", function(d) { 
             if(d.name == "day" || d.name=="night"|| d.name =="instagram"){
                 return(topDictionary[d.name])
@@ -250,7 +251,8 @@ var arc = d3.svg.arc()
           //console.log(imagesArray.slice([1,imagesArray.length]))
            d3.selectAll(".dots").remove()
           drawDots(imagesArray.slice([1,imagesArray.length]),d.name)
-          
+          d3.selectAll(".arc").attr("opacity",.4)
+          d3.select(this).attr("opacity",1)
        // text.transition().attr("opacity", 0);
        // path.transition()
        //   .duration(700)
