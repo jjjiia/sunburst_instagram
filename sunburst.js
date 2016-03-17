@@ -238,14 +238,38 @@ function fakeGridData(size){
     }
     return fakeArray
 }
+var converterEngine = function (input) { // fn BLOB => Binary => Base64 ?
+    var uInt8Array = new Uint8Array(input),
+          i = uInt8Array.length;
+    var biStr = []; //new Array(i);
+    while (i--) { biStr[i] = String.fromCharCode(uInt8Array[i]);  }
+    var base64 = window.btoa(biStr.join(''));
+    return base64;
+};
+var getImageBase64 = function (url, callback) {
+    // to comment better
+    var xhr = new XMLHttpRequest(url), img64;
+    xhr.open('GET', url, true); // url is the url of a PNG/JPG image.
+    xhr.responseType = 'arraybuffer';
+    xhr.callback = callback;
+    xhr.onload  = function(){
+        img64 = converterEngine(this.response); // convert BLOB to base64
+        this.callback(null,img64) // callback : err, data
+    };
+    xhr.onerror = function(){ callback('B64 ERROR', null); };
+    xhr.send();
+};
 
+// make it looks like other D3js requests
+d3.uri = function(url, callback) {
+    return getImageBase64(url, callback);
+  };
 
 
 function drawGrid(category,imagesArray){
-    var short = imagesArray.slice([0,10])
-    console.log(short)
+   
     var fakeData = fakeGridData(Math.random()*800)
-    var imageSize = 10
+    var imageSize = 40
     var perRow = 60
     var fakegrid = d3.select("#grid svg")
     fakegrid.selectAll("image").remove()
@@ -257,8 +281,12 @@ function drawGrid(category,imagesArray){
     .delay(function(d,i){return i})
     .attr("xlink:href", function(d,i){
         //console.log (d[0])
-        return "http://www.dataminding.org/jiazhang/files/gimgs/13_dsc0027.jpg"
-        return "images/"+i%7+".jpeg"
+        return (d[0])
+        d3.uri(d[0], function(data){ 
+            $("#grid").attr("src", "data:image/png;base64," + data);  // inject data:image in DOM
+        } )
+       // return "http://www.dataminding.org/jiazhang/files/gimgs/13_dsc0027.jpg"
+        //return "images/"+i%7+".jpeg"
     })
     .attr("width",imageSize)
     .attr("height",imageSize)
