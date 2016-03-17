@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+path {
+  stroke: #fff;
+  fill-rule: evenodd;
+}
+
+text {
+  font-family: Arial, sans-serif;
+  font-size: 12px;
+}
+#sunburst{
+    position:fixed;
+    left:750px;
+    top:0px;
+    z-index:99999;
+}
+#map{
+    position:fixed;
+    left:0px;
+    top:50px;
+}
+#current{
+    position:fixed;
+    left:720px;
+    top:20px;
+    font-size:20px;
+    font-family:helvetica;
+}
+</style>
+<body>
+<div id = "sunburst"></div>
+<div id = "current">currently viewing:</div>
+<div id = "map"></div>
+<script src="jquery.min.js"></script>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="http://d3js.org/queue.v1.min.js"></script>
+
+<script src="sunburst_map.js"></script>
